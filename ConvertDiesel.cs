@@ -62,6 +62,20 @@ namespace XMLParser
             }
         }
 
+        public void SetExtractDetails(ExtractType extract, HeistType heist)
+        {
+            if (extract == ExtractType.All)
+            {
+                this.Options.ExtractAll = true;
+                this.Options.ExtractInstaces = true;
+            }
+            else
+            {
+                this.Options.ExtractAll = false;
+                this.Options.ExtractInstaces = HeistType.MapAndInstances == heist;
+            }
+        }
+
         public void SetSavePath(string path)
         {
             this.save_path = path;
@@ -91,12 +105,12 @@ namespace XMLParser
             MapDefinitions = new MapDefinition[continents.Length];
             for (int i = 0; i < continents.Length; i++)
             {
-                Continent c = new(heist_path, continents[i]);
-                mission_index = c.IsWorldContinent() ? i : mission_index;
+                Continent c = new(heist_path, continents[i], level_id, folder_id);
+                this.mission_index = c.IsWorldContinent() ? i : this.mission_index;
                 MapDefinitions[i] = new MapDefinition()
                 {
                     Continent = c,
-                    Mission = c.IsWorldContinent() ? new Mission(heist_path) : null
+                    Mission = c.IsWorldContinent() ? new Mission(heist_path, c.ContinentName()) : null
                 };
             }
             UpdateUnitsInElements();
@@ -105,6 +119,22 @@ namespace XMLParser
                 LoadInstances();
                 UpdateInstancesInElements();
             }
+        }
+
+        public void UpdateHeistPathNoContinent(string heist_path)
+        {
+            ClearVariables();
+            MainContinent = new();
+            this.mission_index = 0;
+            MapDefinitions = new MapDefinition[1]
+            {
+                new MapDefinition()
+                {
+                    Continent = null,//new Continent(heist_path, "world"),
+                    Mission = new Mission(heist_path, "world")
+                }
+            };
+            UpdateUnitsInElements();
         }
 
         private void LoadInstances()
@@ -207,5 +237,18 @@ namespace XMLParser
         public DieselPathNotValid()
         {
         }
+    }
+
+    enum ExtractType
+    {
+        All,
+        Heist,
+        Unknown
+    }
+
+    enum HeistType
+    {
+        MapScriptOnly,
+        MapAndInstances
     }
 }

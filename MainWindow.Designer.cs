@@ -51,6 +51,7 @@ namespace XMLParser
             this.progress_total = new System.Windows.Forms.ProgressBar();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.dontcheckfolders_checkbox = new System.Windows.Forms.CheckBox();
             this.extract_type_group.SuspendLayout();
             this.heist_group.SuspendLayout();
             this.SuspendLayout();
@@ -218,7 +219,7 @@ namespace XMLParser
             this.app_version_text.Name = "app_version_text";
             this.app_version_text.Size = new System.Drawing.Size(130, 20);
             this.app_version_text.TabIndex = 15;
-            this.app_version_text.Text = "Update 219 (1.0.4)";
+            this.app_version_text.Text = "Update 220 (1.1.1)";
             // 
             // progress
             // 
@@ -252,11 +253,22 @@ namespace XMLParser
             this.label2.TabIndex = 19;
             this.label2.Text = "Total:";
             // 
+            // dontcheckfolders_checkbox
+            // 
+            this.dontcheckfolders_checkbox.AutoSize = true;
+            this.dontcheckfolders_checkbox.Location = new System.Drawing.Point(647, 12);
+            this.dontcheckfolders_checkbox.Name = "dontcheckfolders_checkbox";
+            this.dontcheckfolders_checkbox.Size = new System.Drawing.Size(158, 24);
+            this.dontcheckfolders_checkbox.TabIndex = 20;
+            this.dontcheckfolders_checkbox.Text = "Don\'t check folders";
+            this.dontcheckfolders_checkbox.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1019, 712);
+            this.Controls.Add(this.dontcheckfolders_checkbox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.progress_total);
@@ -311,6 +323,7 @@ namespace XMLParser
         private System.Windows.Forms.ProgressBar progress_total;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox dontcheckfolders_checkbox;
     }
 }
 

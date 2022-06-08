@@ -26,8 +26,8 @@ namespace XMLParser.MissionFiles.Statics
         public void ParseInstanceData(string instance_path, bool all, string new_instance_save)
         {
             this.instance_save_path = instance_path;
-            Continent = new(instance_path, "world", true);
-            Mission = new(instance_path);
+            Continent = new(instance_path, "world", null, null, true);
+            Mission = new(instance_path, "world");
             ref List<unit> units = ref Continent.GetAllUnits();
             foreach (unit unit in units)
             {

@@ -10,11 +10,12 @@ namespace XMLParser.MissionFiles
 
     class Continent
     {
+        readonly string continent_name;
         readonly bool main_world = false;
         readonly bool instance = false;
         List<unit> units = new();
         List<instance> instances;
-        public Continent(string path, string continent_name, bool instance = false)
+        public Continent(string path, string continent_name, string level_id, string folder_id, bool instance = false)
         {
             this.instance = instance;
             string full_path = path + "\\" + continent_name + "\\" + continent_name + ".continent";
@@ -29,7 +30,8 @@ namespace XMLParser.MissionFiles
                 throw new MainContinentNotLoadedException();
             }
             SharedClass.UpdateProgressText("Parsing continent", full_path);
-            this.main_world = continent_name == "world";
+            this.continent_name = SharedClass.GetWorldName(level_id, folder_id);
+            this.main_world = continent_name == this.continent_name;
             if (this.main_world && !instance)
             {
                 SharedClass.UpdateProgressText("Parsing instances", full_path);
@@ -43,6 +45,11 @@ namespace XMLParser.MissionFiles
         public bool IsWorldContinent()
         {
             return this.main_world;
+        }
+
+        public string ContinentName()
+        {
+            return this.continent_name;
         }
 
         private void ParseInstances(XmlNode instances)

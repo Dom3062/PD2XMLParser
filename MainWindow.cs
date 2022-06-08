@@ -33,6 +33,7 @@ namespace XMLParser
             this.extract_heist_radiobutton.Enabled = enabled;
             this.convert_button.Enabled = !enabled;
             this.reset_button.Enabled = !enabled;
+            this.dontcheckfolders_checkbox.Enabled = enabled;
         }
 
         private void openfile_button_Click(object sender, EventArgs e)
@@ -58,24 +59,33 @@ namespace XMLParser
                 if (this.fbd.ShowDialog() == DialogResult.OK)
                 {
                     string folder_path = this.fbd.SelectedPath;
-                    if (Directory.Exists(folder_path + narrative_path) && Directory.Exists(folder_path + instance_path))
+                    if (this.dontcheckfolders_checkbox.Checked)
                     {
-                        string[] heists = EnemurateDirectories(folder_path + narrative_path);
-                        using Heist h = new(heists);
-                        if (h.ShowDialog() == DialogResult.OK)
-                        {
-                            string selected_heist = h.SelectedHeist;
-                            if (selected_heist != null)
-                            {
-                                this.selected_heist = selected_heist;
-                                selected_load_path = folder_path;
-                                SetEnabledRadiobuttons(false);
-                            }
-                        }
+                        this.selected_heist = folder_path;
+                        selected_load_path = folder_path;
+                        SetEnabledRadiobuttons(false);
                     }
                     else
                     {
-                        MessageBox.Show("Folder 'narratives' and/or 'instances' do not exists", "Missing folder(s)", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        if (Directory.Exists(folder_path + narrative_path) && Directory.Exists(folder_path + instance_path))
+                        {
+                            string[] heists = EnemurateDirectories(folder_path + narrative_path);
+                            using Heist h = new(heists);
+                            if (h.ShowDialog() == DialogResult.OK)
+                            {
+                                string selected_heist = h.SelectedHeist;
+                                if (selected_heist != null)
+                                {
+                                    this.selected_heist = selected_heist;
+                                    selected_load_path = folder_path;
+                                    SetEnabledRadiobuttons(false);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Folder 'narratives' and/or 'instances' do not exists", "Missing folder(s)", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        }
                     }
                 }
             }
@@ -110,44 +120,24 @@ namespace XMLParser
             }
             else if (this.extract_heist_radiobutton.Checked)
             {
-                string[] directories = EnemurateDirectories(selected_load_path);
-                ConvertDiesel Convertor = new();
-                Convertor.SetFiles(directories);
-                Convertor.SetExtractDetails(GetExtractType(), GetHeistType());
-                string worldless = this.selected_heist.Replace("\\world", "");
-                Convertor.UpdateHeistPath(worldless);
-                Convertor.Save();
-                /*if (MissionAndContinentFilesExist(selected_heist))
-                { //Oba soubory existují. Prvně načteme continent
-                    xml_file = selected_heist + continent_file;
-                    UpdateProgressText("Reading continent", xml_file);
-                    LoadDieselScript(out string continent, xml_file);
-                    LoadXML(ref continent); // Continent se načte do paměti
-                    UpdateProgressText("Parsing continent", xml_file);
-                    SaveMissionWorld(xml_file.Replace(continent_extension, continent_txt_extension), ref instances, ref statics);
-                    continent = null;
-                    //save_enabled = false; // Zamezíme uložení elementů, protože jsme neaktualizovali instance
-                    xml_file = selected_heist + mission_file;
-                    UpdateProgressText("Reading mission script", xml_file);
-                    LoadDieselScript(out string mission, xml_file);
-                    UpdateProgressText("Parsing mission script", xml_file);
-                    LoadXML(ref mission); // Elementy se načtou, ale neuloží!
-                    UpdateProgressText("Updating instances in elements", xml_file);
-                    UpdateInstancesInElements(); // Aktualizuj instance v elementech
-                    UpdateProgressText("Updating units in elements", xml_file);
-                    UpdateUnitsInElements(); // Aktualizuj units v elementech
-                    SaveMissionScript(xml_file.Replace(mission_extension, mission_txt_extension));
-                    mission = null;
-                    if (this.map_script_and_instances_radiobutton.Checked)
-                    {
-                        ConvertMissionInstances();
-                    }
-                    GC.Collect();
+                if (this.dontcheckfolders_checkbox.Checked)
+                {
+                    ConvertDiesel Convertor = new();
+                    Convertor.SetExtractDetails(ExtractType.Heist, HeistType.MapScriptOnly);
+                    string worldless = this.selected_heist.Replace("\\world", "");
+                    Convertor.UpdateHeistPathNoContinent(worldless);
+                    Convertor.Save();
                 }
                 else
                 {
-                    MessageBox.Show("Continent and mission files do not exist", "Missing files", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }*/
+                    string[] directories = EnemurateDirectories(selected_load_path);
+                    ConvertDiesel Convertor = new();
+                    Convertor.SetFiles(directories);
+                    Convertor.SetExtractDetails(GetExtractType(), GetHeistType());
+                    string worldless = this.selected_heist.Replace("\\world", "");
+                    Convertor.UpdateHeistPath(worldless);
+                    Convertor.Save();
+                }
             }
             else
             {

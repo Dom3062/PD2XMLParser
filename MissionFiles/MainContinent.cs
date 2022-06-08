@@ -18,6 +18,10 @@ namespace XMLParser.MissionFiles
 
         private readonly ContinentDefinition[] continent_definitions;
         private const string continents_file = "\\continents.continents";
+        public MainContinent()
+        {
+        }
+
         public MainContinent(string heist_path)
         {
             string full_path = heist_path + continents_file;
@@ -55,6 +59,10 @@ namespace XMLParser.MissionFiles
 
         public void Save(StreamWriter sw)
         {
+            if (continent_definitions == null)
+            {
+                return;
+            }
             sw.Write("ID range vs continent name:\n");
             foreach (ContinentDefinition continent in continent_definitions)
             {

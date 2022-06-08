@@ -11,9 +11,9 @@ namespace XMLParser.MissionFiles
         }
         readonly List<ElementBase> elements = new();
         readonly List<NodeStatus> nodes = new();
-        public Mission(string heist_path)
+        public Mission(string heist_path, string continent_name)
         {
-            string full_path = heist_path + "\\world\\world.mission";
+            string full_path = heist_path + "\\" + continent_name + "\\" + continent_name + ".mission";
             SharedClass.UpdateProgressText("Reading mission script", full_path);
             if (!File.Exists(full_path))
             {
@@ -241,6 +241,11 @@ namespace XMLParser.MissionFiles
                 case "ElementRandomInstanceOutput":
                     {
                         e = new ElementRandomInstanceOutput(element_name, editor_name, id, node, values);
+                        break;
+                    }
+                case "ElementRandom":
+                    {
+                        e = new ElementRandom(element_name, editor_name, id, node, values);
                         break;
                     }
                 case "ElementInstanceParams":

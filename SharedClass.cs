@@ -109,7 +109,7 @@ namespace XMLParser
                 else if (folder_id == "peta")
                 {
                     folder_id = "vlad";
-                    if (level_id == "stage")
+                    if (level_id == "stage1")
                     {
                         level_id = "peta";
                     }
@@ -143,6 +143,15 @@ namespace XMLParser
                 folder_id += "\\";
             }
             return (level_id, folder_id);
+        }
+
+        public static string GetWorldName(string level_id, string folder_id)
+        {
+            if (level_id == "mallcrasher")
+            {
+                return "mission_turf_war";
+            }
+            return "world";
         }
 
         public static void CreateFolder(string path)
