@@ -15,7 +15,7 @@ namespace XMLParser
 
         public static readonly string[] unit_attributes_to_avoid = { "continent", "name", "name_id", "position", "rotation", "unit_id" };
 
-        public static readonly string[] contractor_ids = { "armadillo", "bain", "butcher", "classics", "continental", "dentist", "elephant", "escapes", "hector", "locke", "jiu", "pbr", "shayu", "skm", "vlad" };
+        public static readonly string[] contractor_ids = { "armadillo", "bain", "butcher", "blaine", "classics", "continental", "dentist", "elephant", "escapes", "hector", "locke", "jiu", "mcshay", "pbr", "shayu", "skm", "vlad" };
         public static void SetMainWindow(MainWindow MW)
         {
             SharedClass.MW = MW;
